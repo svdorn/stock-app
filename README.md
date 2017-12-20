@@ -9,7 +9,7 @@ System is deployed to Heroku
 
 ## Authors
 
-* **Stephen Dorn** - *CTO* - [svdorn](https://github.com/svdorn)
+* **Stephen Dorn** - [svdorn](https://github.com/svdorn)
 
 ## License
 
