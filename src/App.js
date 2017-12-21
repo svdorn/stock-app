@@ -11,10 +11,13 @@ class App extends Component {
             <div className="App">
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
-                    <h1 className="App-title">Welcome to the MattyIce Stock Guide</h1>
+                    <h1 className="App-title">MattyIce Stock Trading</h1>
+                    <SearchBar/>
                 </header>
-                <SearchBar/>
                 <MarketData/>
+                <footer className="App-footer">
+                    <h5>MattyIce Stock Trading</h5>
+                </footer>
             </div>
         );
     }

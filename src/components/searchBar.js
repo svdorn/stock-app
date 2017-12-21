@@ -4,7 +4,7 @@ import { Navbar, FormGroup, FormControl, Button } from 'react-bootstrap';
 class SearchBar extends Component {
     render() {
         return(
-            <Navbar>
+            <Navbar className="SearchBar">
                 <Navbar.Collapse>
                     <Navbar.Form>
                         <FormGroup>
