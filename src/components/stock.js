@@ -10,7 +10,8 @@ class Stock extends Component {
         this.state = ({
             summaryDetail: undefined,
             keyStats: undefined,
-            name: ''
+            name: '',
+            error: '',
         });
     }
 
@@ -27,14 +28,17 @@ class Stock extends Component {
             modules: ['summaryDetail', 'defaultKeyStatistics']
         })
             .then(data =>
-                this.setState({summaryDetail: data.summaryDetail, keyStats: data.defaultKeyStatistics})
+                this.setState({summaryDetail: data.summaryDetail, keyStats: data.defaultKeyStatistics, error: ''})
+            )
+            .catch(err =>
+                this.setState({error: "Not a valid ticker symbol, try another stock"})
             )
     }
 
     getRecommendation(price, futurePrice) {
         if (futurePrice > price) {
             return "Buy";
-        } else if ((price / futurePrice) >= 1.25) {
+        } else if ((price / futurePrice) >= 1.12) {
             return "Sell";
         }
         return "Hold";
@@ -49,7 +53,10 @@ class Stock extends Component {
                 modules: ['summaryDetail', 'defaultKeyStatistics']
             })
                 .then(data =>
-                    this.setState({summaryDetail: data.summaryDetail, keyStats: data.defaultKeyStatistics})
+                    this.setState({summaryDetail: data.summaryDetail, keyStats: data.defaultKeyStatistics, error: ''})
+                )
+                .catch(err =>
+                    this.setState({error: "Not a valid ticker symbol, try another stock"})
                 )
         }
         let summary = this.state.summaryDetail;
@@ -70,50 +77,67 @@ class Stock extends Component {
                 <div>
                     <Button type="submit" onClick={this.handleClick.bind(this)} className="HomeButton">Homepage</Button>
                 </div>
-                <Panel header={<h1>{name} Statistics</h1>} bsStyle="primary" className="StockData-Panel">
-                    {summary !== undefined && data !== undefined ?
-                        <h5>
-                            Price: <div className="MarketData">{summary.ask}</div>
-                            <br/>
-                            Beta: <div className="MarketData">{summary.beta}</div>
-                            <br/>
-                            Forward EPS: <div className="MarketData">{data.forwardEps}</div>
-                            <br/>
-                            Forward PE: <div className="MarketData">{data.forwardPE}</div>
-                        </h5>
-                        : <div className="Loading">Loading...</div>}
-                </Panel>
-                <Panel header={<h1>{name} High/Low Stats</h1>} bsStyle="primary" className="StockData-Panel">
-                    {summary !== undefined && data !== undefined ?
-                        <h5>
-                            Day High: <div className="MarketData">{summary.dayHigh}</div>
-                            <br/>
-                            Day Low: <div className="MarketData">{summary.dayLow}</div>
-                            <br/>
-                            52-Week High: <div className="MarketData">{summary.fiftyTwoWeekHigh}</div>
-                            <br/>
-                            52-Week Low: <div className="MarketData">{summary.fiftyTwoWeekLow}</div>
-                        </h5>
-                        : <div className="Loading">Loading...</div>}
-                </Panel>
-                <Panel header={<h1>{name} Dividend Stats</h1>} bsStyle="primary" className="StockData-Panel">
-                    {summary !== undefined && data !== undefined ?
-                        <h5>
-                            Dividend: <div className="MarketData">{summary.dividendRate}</div>
-                            <br/>
-                            DividendYield: <div className="MarketData">{summary.dividendYield}</div>
-                        </h5>
-                        : <div className="Loading">Loading...</div>}
-                </Panel>
-                <Panel header={<h1>{name} Suggestion</h1>} bsStyle="primary" className="StockData-PanelSuggestion">
-                    {summary !== undefined && data !== undefined ?
-                        <h5>
-                            Predicted Price: <div className="MarketData">{price}</div>
-                            <br/>
-                            Recommendation: <div className="MarketData">{this.getRecommendation(summary.ask, price)}</div>
-                        </h5>
-                        : <div className="Loading">Loading...</div>}
-                </Panel>
+                {this.state.error === '' ?
+                    <div>
+                        <Panel header={<h1>{name} Statistics</h1>} bsStyle="primary" className="StockData-Panel">
+                            {summary !== undefined && data !== undefined ?
+                                <h5>
+                                    Price:
+                                    <div className="MarketData">{summary.ask}</div>
+                                    <br/>
+                                    Beta:
+                                    <div className="MarketData">{summary.beta}</div>
+                                    <br/>
+                                    Forward EPS:
+                                    <div className="MarketData">{data.forwardEps}</div>
+                                    <br/>
+                                    Forward PE:
+                                    <div className="MarketData">{data.forwardPE}</div>
+                                </h5>
+                                : <div className="Loading">Loading...</div>}
+                        </Panel>
+                        <Panel header={<h1>{name} High/Low Stats</h1>} bsStyle="primary" className="StockData-Panel">
+                            {summary !== undefined && data !== undefined ?
+                                <h5>
+                                    Day High:
+                                    <div className="MarketData">{summary.dayHigh}</div>
+                                    <br/>
+                                    Day Low:
+                                    <div className="MarketData">{summary.dayLow}</div>
+                                    <br/>
+                                    52-Week High:
+                                    <div className="MarketData">{summary.fiftyTwoWeekHigh}</div>
+                                    <br/>
+                                    52-Week Low:
+                                    <div className="MarketData">{summary.fiftyTwoWeekLow}</div>
+                                </h5>
+                                : <div className="Loading">Loading...</div>}
+                        </Panel>
+                        <Panel header={<h1>{name} Dividend Stats</h1>} bsStyle="primary" className="StockData-Panel">
+                            {summary !== undefined && data !== undefined ?
+                                <h5>
+                                    Dividend:
+                                    <div className="MarketData">{summary.dividendRate}</div>
+                                    <br/>
+                                    DividendYield:
+                                    <div className="MarketData">{summary.dividendYield}</div>
+                                </h5>
+                                : <div className="Loading">Loading...</div>}
+                        </Panel>
+                        <Panel header={<h1>{name} Suggestion</h1>} bsStyle="primary"
+                               className="StockData-PanelSuggestion">
+                            {summary !== undefined && data !== undefined ?
+                                <h5>
+                                    Predicted Price:
+                                    <div className="MarketData">{price}</div>
+                                    <br/>
+                                    Recommendation:
+                                    <div className="MarketData">{this.getRecommendation(summary.ask, price)}</div>
+                                </h5>
+                                : <div className="Loading">Loading...</div>}
+                        </Panel>
+                    </div>
+                    : <div className="messageHeader errorHeader">{this.state.error}</div>}
             </div>
         );
     }
