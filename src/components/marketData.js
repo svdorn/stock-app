@@ -12,12 +12,13 @@ class MarketData extends Component {
             gild: {},
             swks: {},
             att: {},
+            sector: {},
         });
     }
 
     componentWillMount() {
         let date = new Date();
-        let today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+        let today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate());
 
         alpha.data.monthly("DJIA", 1).then(data =>
             this.setState({djia: data["Monthly Time Series"][today]})
@@ -37,11 +38,15 @@ class MarketData extends Component {
         alpha.data.monthly("T", 1).then(data =>
             this.setState({att: data["Monthly Time Series"][today]})
         );
+        alpha.performance.sector()
+            .then(data =>
+                this.setState({sector: data})
+            )
     }
 
     render() {
         return (
-            <PanelGroup accordian>
+            <PanelGroup>
                 <Panel header={<h1>Market Data</h1>} bsStyle="primary" className="MarketData-Panel">
                     <h5>
                         Dow Jones Industrial Average: {this.state.djia["1. open"] === undefined ?

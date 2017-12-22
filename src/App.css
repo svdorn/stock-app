@@ -18,7 +18,7 @@
   background-color: #222;
   padding: 20px;
   color: white;
-  position: absolute;
+  position: relative;
   bottom: 0;
   width: 100%;
 }
@@ -46,9 +46,37 @@
   min-width: 387.25px;
 }
 
+.MarketGraph-Panel{
+  display: inline-block;
+  margin: 15px;
+  min-width: 915px;
+}
+
+.StockData-Panel{
+  display: inline-table;
+  width: 300px;
+  margin: 15px;
+  min-height: 178px;
+  text-align: center;
+}
+
+.StockData-PanelSuggestion{
+  display: inline-table;
+  width: 75%;
+  margin: 15px;
+  min-height: 200px;
+  text-align: center;
+}
+
 .SearchBar{
   background-color: #222;
   border: none;
+}
+
+.HomeButton {
+  display: inline-block;
+  margin-bottom: 3px;
+  margin-top: 10px;
 }
 
 @keyframes App-logo-spin {
