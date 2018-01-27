@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Panel} from 'react-bootstrap';
 import {browserHistory} from 'react-router';
+import {LineChart, Line, XAxis, YAxis, Tooltip, Legend} from 'recharts';
 import yahooFinance from 'yahoo-finance';
 
 class Stock extends Component {
@@ -10,6 +11,7 @@ class Stock extends Component {
         this.state = ({
             summaryDetail: undefined,
             keyStats: undefined,
+            graph: undefined,
             name: '',
             error: '',
         });
@@ -22,6 +24,8 @@ class Stock extends Component {
     componentWillMount() {
         const name = this.props.params.name;
         this.setState({name: name});
+        let date = new Date();
+        let today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate());
 
         yahooFinance.quote({
             symbol: name,
@@ -32,7 +36,17 @@ class Stock extends Component {
             )
             .catch(err =>
                 this.setState({error: "Not a valid ticker symbol, try another stock"})
-            )
+            );
+        yahooFinance.historical({
+            symbol: name,
+            from: '201-01-01',
+            to: today,
+            period: 'm',
+            // period: 'd'  // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
+        })
+            .then(data =>
+            this.setState({graph: data})
+        )
     }
 
     getRecommendation(price, futurePrice) {
