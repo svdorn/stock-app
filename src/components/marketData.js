@@ -18,7 +18,7 @@ class MarketData extends Component {
 
     componentWillMount() {
         let date = new Date();
-        let today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate()-5);
+        let today = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + (date.getDate()-7);
 
         alpha.data.monthly("DJIA", 1).then(data =>
             this.setState({djia: data["Monthly Time Series"][today]})
